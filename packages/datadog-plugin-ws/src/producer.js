@@ -60,7 +60,7 @@ class WSProducerPlugin extends TracingPlugin {
     }
 
     // Add span pointer for context propagation
-    if (this.config.addSpanPointers && ctx.data) {
+    if (this.config.traceWebsocketMessagesEnabled && ctx.data) {
       const messageHash = generateWebSocketMessageHash(ctx.data)
       if (messageHash) {
         ctx.span.addSpanPointer(WEBSOCKET_PTR_KIND, SPAN_POINTER_DIRECTION.DOWNSTREAM, messageHash)

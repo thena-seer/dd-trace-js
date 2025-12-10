@@ -21,24 +21,23 @@ function generateWebSocketMessageHash (data) {
     } else if (data instanceof Blob) {
       // For Blobs, we can't synchronously get the content
       // Skip hashing for now
-      return undefined
+      return
     } else if (Array.isArray(data)) {
       // Handle array of buffers
       dataToHash = Buffer.concat(data.map(chunk => Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk)))
     } else {
       // Unknown data type
-      return undefined
+      return
     }
 
     const hash = crypto.createHash('sha256').update(dataToHash).digest('hex')
     return hash.slice(0, 32)
-  } catch (err) {
+  } catch {
     // If hashing fails for any reason, return undefined
-    return undefined
+    return
   }
 }
 
 module.exports = {
   generateWebSocketMessageHash
 }
-

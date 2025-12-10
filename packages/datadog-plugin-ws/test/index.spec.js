@@ -393,12 +393,11 @@ describe('Plugin', () => {
         })
       })
 
-      describe('with span pointers enabled', () => {
+      describe('with span pointers', () => {
         beforeEach(async () => {
           await agent.load(['ws'], [{
             service: 'ws-with-pointers',
             traceWebsocketMessagesEnabled: true,
-            addSpanPointers: true
           }])
           WebSocket = require(`../../../versions/ws@${version}`).get()
 
@@ -425,11 +424,11 @@ describe('Plugin', () => {
             const producerSpan = traces[0][0]
             assert.strictEqual(producerSpan.name, 'websocket.send')
             assert.strictEqual(producerSpan.service, 'ws-with-pointers')
-            
+
             // Check for span links with span pointer attributes
             if (producerSpan.meta['_dd.span_links']) {
               const spanLinks = JSON.parse(producerSpan.meta['_dd.span_links'])
-              const pointerLink = spanLinks.find(link => 
+              const pointerLink = spanLinks.find(link =>
                 link.attributes && link.attributes['link.kind'] === 'span-pointer'
               )
               if (pointerLink) {
@@ -458,11 +457,11 @@ describe('Plugin', () => {
             const consumerSpan = traces.find(t => t[0].name === 'websocket.receive')?.[0]
             if (consumerSpan) {
               assert.strictEqual(consumerSpan.service, 'ws-with-pointers')
-              
+
               // Check for span links with span pointer attributes
               if (consumerSpan.meta['_dd.span_links']) {
                 const spanLinks = JSON.parse(consumerSpan.meta['_dd.span_links'])
-                const pointerLink = spanLinks.find(link => 
+                const pointerLink = spanLinks.find(link =>
                   link.attributes && link.attributes['link.kind'] === 'span-pointer'
                 )
                 if (pointerLink) {
@@ -499,7 +498,7 @@ describe('Plugin', () => {
             const producerTrace = traces.find(t => t[0].name === 'websocket.send')
             if (producerTrace && producerTrace[0].meta['_dd.span_links']) {
               const spanLinks = JSON.parse(producerTrace[0].meta['_dd.span_links'])
-              const pointerLink = spanLinks.find(link => 
+              const pointerLink = spanLinks.find(link =>
                 link.attributes && link.attributes['link.kind'] === 'span-pointer'
               )
               if (pointerLink) {
@@ -511,7 +510,7 @@ describe('Plugin', () => {
             const consumerTrace = traces.find(t => t[0].name === 'websocket.receive')
             if (consumerTrace && consumerTrace[0].meta['_dd.span_links']) {
               const spanLinks = JSON.parse(consumerTrace[0].meta['_dd.span_links'])
-              const pointerLink = spanLinks.find(link => 
+              const pointerLink = spanLinks.find(link =>
                 link.attributes && link.attributes['link.kind'] === 'span-pointer'
               )
               if (pointerLink) {
