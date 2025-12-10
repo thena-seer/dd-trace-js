@@ -1,6 +1,8 @@
 'use strict'
 
 const TracingPlugin = require('../../dd-trace/src/plugins/tracing.js')
+const { generateWebSocketMessageHash } = require('./util')
+const { WEBSOCKET_PTR_KIND, SPAN_POINTER_DIRECTION } = require('../../dd-trace/src/constants')
 
 class WSReceiverPlugin extends TracingPlugin {
   static get id () { return 'ws' }
@@ -65,6 +67,14 @@ class WSReceiverPlugin extends TracingPlugin {
         context: ctx.socket.spanContext,
         attributes: { 'dd.kind': 'executed_by' },
       })
+    }
+
+    // Add span pointer for context propagation
+    if (this.config.addSpanPointers && ctx.data) {
+      const messageHash = generateWebSocketMessageHash(ctx.data)
+      if (messageHash) {
+        ctx.span.addSpanPointer(WEBSOCKET_PTR_KIND, SPAN_POINTER_DIRECTION.UPSTREAM, messageHash)
+      }
     }
 
     ctx.span.finish()

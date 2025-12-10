@@ -50,6 +50,7 @@ module.exports = {
   GRPC_SERVER_ERROR_STATUSES: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
   DYNAMODB_PTR_KIND: 'aws.dynamodb.item',
   S3_PTR_KIND: 'aws.s3.object',
+  WEBSOCKET_PTR_KIND: 'websocket.message',
   SPAN_POINTER_DIRECTION: Object.freeze({
     UPSTREAM: 'u',
     DOWNSTREAM: 'd'
